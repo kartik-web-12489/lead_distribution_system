@@ -4,9 +4,12 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 class LeadsTable {
     public static function configure(Table $table): Table {
         return $table
@@ -48,6 +51,16 @@ class LeadsTable {
                     ]),
                 SelectFilter::make('buyer')
                     ->relationship('buyer', 'name'),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('date'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['date'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '=', $date),
+                        );
+                    }),
             ])
             ->recordActions([
                 ViewAction::make(),
