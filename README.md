@@ -1,58 +1,257 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Lead Distribution System (Filament v5)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A dynamic, rule-based lead distribution system built with Laravel and Filament v5.
+This application automatically assigns incoming leads to buyers based on configurable criteria—without hardcoding.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📌 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* ✅ Dynamic rule engine (DB-driven, no hardcoding)
+* ✅ Buyer priority-based lead distribution
+* ✅ One lead → one buyer (strict enforcement)
+* ✅ Unmatched lead handling
+* ✅ Filament v5 admin panel
+* ✅ Rule builder UI (via repeater)
+* ✅ Lead tracking & filtering
+* ✅ Lead logs (audit trail)
+* ✅ Dashboard widget (stats)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🧠 How It Works
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. A lead is submitted via API & Front-end Lead Form
+2. System evaluates buyers in **priority order**
+3. Each buyer has **rules stored in DB**
+4. Lead is assigned to the **first matching buyer**
+5. If no match → marked as `unmatched`
+6. All actions are logged in **lead_logs table**
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🏗️ Tech Stack
 
-## Agentic Development
+* Laravel (PHP)
+* Filament v5 (Admin Panel)
+* MySQL / PostgreSQL
+* REST API
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## 📂 Project Structure
 
-php artisan boost:install
+```
+app/
+├── Models/
+│   ├── User.php
+│   ├── Lead.php
+│   ├── Buyer.php
+│   ├── Rule.php
+│   └── LeadLog.php
+│
+├── Services/
+│   └── LeadMatcher.php
+│
+├── Filament/
+│   ├── Resources/
+│   │   ├── Buyers/
+│   │   ├── Leads/
+│   │   └── LeadLogs/
+│   │
+│   └── Widgets/
+│       ├── StatsOverview.php
+database/
+│
+├── migrations/
+│ ├── create_buyers_table.php
+│ ├── create_rules_table.php
+│ ├── create_leads_table.php
+│ └── create_lead_logs_table.php
+│
+├── seeders/
+│ ├── BuyerSeeder.php
+│ └── DatabaseSeeder.php
+│
+routes/
+│ ├── web.php
+│ └── api.php
+│
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## ⚙️ Installation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Clone Repository
 
-## Code of Conduct
+```
+git clone https://github.com/kartik-web-12489/lead_distribution_system.git
+cd lead-distribution
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Install Dependencies
 
-## Security Vulnerabilities
+```
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Setup Environment
 
-## License
+```
+cp .env.example .env
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Configure Database
+
+Update `.env` with your DB credentials.
+
+### 5. Run Migrations + Seeders
+
+```
+php artisan migrate --seed
+```
+
+### 7. Start Server
+
+```
+php artisan serve
+```
+
+### 8. Login to Admin Credentials
+
+```
+Email : admin@mail.com
+Password : 123456
+```
+
+---
+
+## 📬 API Endpoint
+
+### ➤ Create Lead
+
+**POST** `/api/leads`
+
+### Request Body
+
+```json
+{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "gender": "female",
+  "age": 30
+}
+```
+
+### Response
+
+```json
+{
+    "status": "matched",
+    "name": "Alice",
+    "email": "alice@example.com",
+    "gender": "female",
+    "age": 30,
+    "updated_at": "2026-04-03T07:52:58.000000Z",
+    "created_at": "2026-04-03T07:52:58.000000Z",
+    "id": 1,
+    "buyer_id": 1
+}
+```
+
+---
+
+## 🎛️ Filament Admin Panel
+
+Access:
+
+```
+/admin
+```
+
+### Modules:
+
+#### 👤 Buyers
+
+* Create buyers with priority
+* Define rules dynamically (field, operator, value)
+
+#### 📄 Leads
+
+* View all leads
+* See assigned buyer
+* Filter by Status
+* Filter by Buyer
+
+#### 📜 Lead Logs
+
+* Full audit trail
+* Rule evaluation visibility
+* Debug unmatched leads
+
+#### 📊 Dashboard
+
+* Total leads
+* Matched / unmatched
+
+---
+
+## 🔥 Rule Engine Design
+
+Rules are stored in DB:
+
+| Field  | Operator | Value  |
+| ------ | -------- | ------ |
+| gender | =        | female |
+| age    | <=       | 50     |
+
+Supported operators:
+
+* `=`, `!=`
+* `>`, `<`
+* `>=`, `<=`
+
+👉 Easily extendable by adding new operators
+
+---
+
+## 📊 Example Buyers
+
+### Buyer 1 -- Standard
+
+* Female leads only
+
+### Buyer 2 -- Premium
+
+* Female + Age ≤ 50
+
+### Buyer 3 -- Open
+
+* No rules (fallback buyer)
+
+---
+
+## 🧪 Testing
+
+Use Postman or any API client.
+
+* Import provided collection
+* Test different lead scenarios
+
+---
+
+## 🧠 Design Decisions
+
+* ✔ Service-based architecture
+* ✔ Dynamic rule engine (no hardcoding)
+* ✔ Priority-driven matching
+* ✔ Audit logging for traceability
+* ✔ Extensible structure for future rules
+
+---
+
+## 👨‍💻 Author
+
+Kartik Patel
