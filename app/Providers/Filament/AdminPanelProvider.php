@@ -22,6 +22,7 @@ class AdminPanelProvider extends PanelProvider {
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('Lead Distribution System')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -36,6 +37,7 @@ class AdminPanelProvider extends PanelProvider {
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
+            ->globalSearch(false)
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -47,6 +49,7 @@ class AdminPanelProvider extends PanelProvider {
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->spa()
             ->authMiddleware([
                 Authenticate::class,
             ]);
